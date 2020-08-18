@@ -1,10 +1,21 @@
+import 'dotenv/config'
 import express from 'express'
-import '@controllers/UsersController'
+import morgan from 'morgan'
+import cors from 'cors'
+
+import routes from '@routes/index'
+import connectionDatabase from '@database/connection'
 
 const app = express()
 
-app.get('/', (request, response) => {
-  return response.json({ message: 'Hello World' })
-})
+connectionDatabase()
 
-app.listen(3333)
+app.use(cors())
+app.use(express.json())
+app.use(morgan('dev'))
+
+app.use(routes)
+
+app.listen(3333, () => {
+  console.log('Server started in port: 3333')
+})
